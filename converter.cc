@@ -53,6 +53,9 @@ void converter(std::string str_file_in, std::string str_file_out="out.root"){
             continue;
           }
           passed_cuts.push_back(1);
+
+        }
+        return passed_cuts;
         }, {"linear_id", "width"});
       cuts.emplace_back( str_coordinate );
     }
