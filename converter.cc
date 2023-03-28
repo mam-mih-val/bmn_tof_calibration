@@ -36,7 +36,24 @@ void converter(std::string str_file_in, std::string str_file_out="out.root"){
     for( int strip_id = 0; strip_id < 48; ++strip_id ){
       std::string str_coordinate = "plane"+std::to_string(plane_id)+"_strip"+std::to_string( strip_id );
       auto l_id = plane_id * 48 + strip_id;
-      dd = dd.Define( str_coordinate, "linear_id == "+std::to_string(l_id) );
+      dd = dd.Define( str_coordinate,
+                      [l_id](ROOT::VecOps::RVec<int> linear, ROOT::VecOps::RVec<float> width ){
+        ROOT::VecOps::RVec<int> passed_cuts;
+        for( int i=0; i<linear.size(); ++i ){
+          if( linear.at(i) != l_id ){
+            passed_cuts.push_back(0);
+            continue;
+          }
+          if( width.at(i) < 22.8 ){
+            passed_cuts.push_back(0);
+            continue;
+          }
+          if( width.at(i) > 26.2 ){
+            passed_cuts.push_back(0);
+            continue;
+          }
+          passed_cuts.push_back(1);
+        }, {"linear_id", "width"});
       cuts.emplace_back( str_coordinate );
     }
   }
