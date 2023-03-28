@@ -29,7 +29,7 @@ void converter(std::string str_file_in, std::string str_file_out="out.root"){
           },
           {"plane", "strip"})
           ;
-  std::vector<std::vector<ROOT::RDF::RResultPtr<::TH2D>> h2_tof_vs_tot;
+  std::vector< std::vector< ROOT::RDF::RResultPtr<::TH2D> > > h2_tof_vs_tot;
   std::vector<std::string> cuts;
   for( int plane_id = 0; plane_id < 20; ++plane_id ){
     for( int strip_id = 0; strip_id < 48; ++strip_id ){
