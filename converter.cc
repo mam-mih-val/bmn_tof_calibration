@@ -35,7 +35,7 @@ void converter(std::string str_file_in, std::string str_file_out="out.root"){
     for( int strip_id = 0; strip_id < 48; ++strip_id ){
       std::string str_coordinate = "plane"+std::to_string(plane_id)+"_strip"+std::to_string( strip_id );
       auto l_id = plane_id * 48 + strip_id;
-      dd.Define( str_coordinate, "plane == "+std::to_string(l_id) );
+      dd = dd.Define( str_coordinate, "plane == "+std::to_string(l_id) );
       cuts.emplace_back( str_coordinate );
     }
   }
