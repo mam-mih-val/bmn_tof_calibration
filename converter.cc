@@ -8,7 +8,6 @@ void converter(std::string file_in, std::string file_out="out.root"){
           .Define("plane", "TOF400Conteiner.fPlane")
           .Define("strip", "TOF400Conteiner.fStrip")
           .Define("time", "TOF400Conteiner.fTime")
-          .Define("width", "TOF400Conteiner.fTime")
           .Define("width", "TOF400Conteiner.fWidth")
           .Define("T0", "TOF400Conteiner.fT0")
           .Define("T0_width", "TOF400Conteiner.fWidthT0")
