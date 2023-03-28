@@ -16,7 +16,7 @@ void converter(std::string str_file_in, std::string str_file_out="out.root"){
           .Define("w0", "TOF400Conteiner.fWidthT0")
           .Define("dt", "ROOT::VecOps::RVec<float> dt; for(int i=0; i<time.size(); ++i) dt.push_back(time[i]-t0[i]); return dt;")
           .Define("linear_id",
-                  []( ROOT::VecOps::RVec<int> plane, ROOT::VecOps::RVec<int> strip ){
+                  []( ROOT::VecOps::RVec<short> plane, ROOT::VecOps::RVec<int> strip ){
             // vectorizing the matrix of [n_planes x n_strips]
             ROOT::VecOps::RVec<int> linear{};
             for( size_t i=0; i<plane.size(); ++i ){
