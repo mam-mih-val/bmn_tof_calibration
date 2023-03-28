@@ -9,9 +9,9 @@ void converter(std::string file_in, std::string file_out="out.root"){
           .Define("strip", "TOF400Conteiner.fStrip")
           .Define("time", "TOF400Conteiner.fTime")
           .Define("width", "TOF400Conteiner.fWidth")
-          .Define("t0", "TOF400Conteiner.fT0")
-          .Define("t0_width", "TOF400Conteiner.fWidthT0")
+          .Define("t0", "TOF400Conteiner.fTimeT0")
+          .Define("w0", "TOF400Conteiner.fWidthT0")
           ;
 
-  dd.Snapshot("t", file_out,dd.GetDefinedColumnNames());
+  dd.Snapshot("tof400", file_out,dd.GetDefinedColumnNames());
 }
