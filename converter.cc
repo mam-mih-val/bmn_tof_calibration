@@ -23,7 +23,7 @@ void converter(std::string str_file_in, std::string str_file_out="out.root"){
               auto p_id = plane.at(i);
               auto s_id = strip.at(i);
               auto l_id = p_id * 48 + s_id;
-              linear_id.push_back(l_id);
+              linear.push_back(l_id);
             }
             return linear;
           },
