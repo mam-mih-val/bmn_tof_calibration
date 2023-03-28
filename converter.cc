@@ -7,7 +7,7 @@ void converter(std::string str_file_in, std::string str_file_out="out.root"){
   auto* chain = new TChain( "TOF400" );
   chain->AddFileInfoList( collection.GetList() );
 
-  ROOT::RDataFrame d( *t );
+  ROOT::RDataFrame d( *chain );
   auto dd = d
           .Define("plane", "TOF400Conteiner.fPlane")
           .Define("strip", "TOF400Conteiner.fStrip")
