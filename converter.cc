@@ -44,7 +44,7 @@ void converter(std::string str_file_in, std::string str_file_out="out.root"){
     h2_tof_vs_tot.emplace_back();
     for( int strip_id = 0; strip_id < 48; ++strip_id ){
       std::string str_coordinate = "plane"+std::to_string(plane_id)+"_strip"+std::to_string( strip_id );
-      h2_tof_vs_tot.back().push_back( dd.Histo2D({str_coordinate.c_str(), ";T0 width;dt", 100, 30, 50, 100, -1000, 0}, "w0", "dt", str_coordinate) );
+      h2_tof_vs_tot.back().push_back( dd.Histo2D({str_coordinate.c_str(), ";T0 width;dt", 100, 42, 52, 100, -550, -500}, "w0", "dt", str_coordinate) );
     }
   }
 
