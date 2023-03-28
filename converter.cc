@@ -30,6 +30,7 @@ void converter(std::string str_file_in, std::string str_file_out="out.root"){
           {"plane", "strip"})
           ;
   std::vector< std::vector< ROOT::RDF::RResultPtr<::TH2D> > > h2_tof_vs_tot;
+  std::vector< std::vector< ROOT::RDF::RResultPtr<::TH1D> > > h1_tot;
   std::vector<std::string> cuts;
   for( int plane_id = 0; plane_id < 20; ++plane_id ){
     for( int strip_id = 0; strip_id < 48; ++strip_id ){
@@ -42,9 +43,11 @@ void converter(std::string str_file_in, std::string str_file_out="out.root"){
 
   for( int plane_id = 0; plane_id < 20; ++plane_id ){
     h2_tof_vs_tot.emplace_back();
+    h1_tot.emplace_back();
     for( int strip_id = 0; strip_id < 48; ++strip_id ){
       std::string str_coordinate = "plane"+std::to_string(plane_id)+"_strip"+std::to_string( strip_id );
       h2_tof_vs_tot.back().push_back( dd.Histo2D({str_coordinate.c_str(), ";T0 width;dt", 100, 42, 52, 100, -550, -500}, "w0", "dt", str_coordinate) );
+      h1_tot.back().push_back( dd.Histo1D({std::data("width_"+str_coordinate), ";width;counts", 100, 0, 50}, "w0", str_coordinate) );
     }
   }
 
@@ -55,6 +58,7 @@ void converter(std::string str_file_in, std::string str_file_out="out.root"){
     file_out->cd( str_plane.c_str() );
     for( int strip_id = 0; strip_id < 48; ++strip_id ){
       h2_tof_vs_tot.at(plane_id).at(strip_id)->Write();
+      h1_tot.at(plane_id).at(strip_id)->Write();
     }
     file_out->cd();
   }
