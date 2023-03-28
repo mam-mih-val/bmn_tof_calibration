@@ -7,6 +7,9 @@ void converter(std::string file_in, std::string file_out="out.root"){
   auto dd = d
           .Define("plane", "TOF400Conteiner.fPlane")
           .Define("strip", "TOF400Conteiner.fStrip")
+          .Define("x", "TOF400Conteiner.fX")
+          .Define("y", "TOF400Conteiner.fY")
+          .Define("z", "TOF400Conteiner.fZ")
           .Define("time", "TOF400Conteiner.fTime")
           .Define("width", "TOF400Conteiner.fWidth")
           .Define("t0", "TOF400Conteiner.fTimeT0")
