@@ -35,7 +35,7 @@ void converter(std::string str_file_in, std::string str_file_out="out.root"){
     for( int strip_id = 0; strip_id < 48; ++strip_id ){
       std::string str_coordinate = "plane"+std::to_string(plane_id)+"_strip"+std::to_string( strip_id );
       auto l_id = plane_id * 48 + strip_id;
-      dd = dd.Define( str_coordinate, "plane == "+std::to_string(l_id) );
+      dd = dd.Define( str_coordinate, "linear_id == "+std::to_string(l_id) );
       cuts.emplace_back( str_coordinate );
     }
   }
@@ -50,9 +50,13 @@ void converter(std::string str_file_in, std::string str_file_out="out.root"){
 
   auto file_out = std::make_unique<TFile>(str_file_out.c_str(), "recreate");
   for( int plane_id = 0; plane_id < 20; ++plane_id ){
+    std::string str_plane = "plane_"+std::to_string( plane_id );
+    file_out->mkdir( str_plane.c_str() );
+    file_out->cd( str_plane.c_str() );
     for( int strip_id = 0; strip_id < 48; ++strip_id ){
       h2_tof_vs_tot.at(plane_id).at(strip_id)->Write();
     }
+    file_out->cd();
   }
   file_out->Close();
 }
