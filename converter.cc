@@ -4,7 +4,7 @@
 
 void converter(std::string str_file_in, std::string str_file_out="out.root"){
   ROOT::RDataFrame d( "TOF400", str_file_in );
-  auto dd = d
+  auto dd = d.Filter("2.79812e+04 -3* 2.22095e+03 < BC1Int && BC1Int < 2.79812e+04 + 3*2.22095e+03")
           .Define("plane", "TOF400Conteiner.fPlane")
           .Define("strip", "TOF400Conteiner.fStrip")
           .Define("x", "TOF400Conteiner.fX")
