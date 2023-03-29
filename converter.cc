@@ -44,11 +44,11 @@ void converter(std::string str_file_in, std::string str_file_out="out.root"){
             passed_cuts.push_back(0);
             continue;
           }
-          if( width.at(i) < 22.8 ){
+          if( width.at(i) < 24 ){
             passed_cuts.push_back(0);
             continue;
           }
-          if( width.at(i) > 26.2 ){
+          if( width.at(i) > 25 ){
             passed_cuts.push_back(0);
             continue;
           }
@@ -66,7 +66,7 @@ void converter(std::string str_file_in, std::string str_file_out="out.root"){
     h1_tot.emplace_back();
     for( int strip_id = 0; strip_id < 48; ++strip_id ){
       std::string str_coordinate = "plane"+std::to_string(plane_id)+"_strip"+std::to_string( strip_id );
-      h2_tof_vs_tot.back().push_back( dd.Histo2D({str_coordinate.c_str(), ";T0 width;dt", 240, 43, 49, 240, -540, -510}, "w0", "dt", str_coordinate) );
+      h2_tof_vs_tot.back().push_back( dd.Histo2D({str_coordinate.c_str(), ";T0 width;dt", 60, 43, 49, 60, -540, -510}, "w0", "dt", str_coordinate) );
       h1_tot.back().push_back( dd.Histo1D({std::data("width_"+str_coordinate), ";width;counts", 100, 0, 100}, "width", str_coordinate) );
     }
   }
