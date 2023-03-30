@@ -71,6 +71,8 @@ void converter(std::string str_file_in, std::string str_file_out="out.root"){
     }
   }
 
+  auto h2_tof_vs_tot_integral = dd.Histo2D({"tof_vs_tot_integral", ";T0 width;dt", 1024, 10, 50, 1024, -600, -450}, "w0", "dt");
+
   auto file_out = std::make_unique<TFile>(str_file_out.c_str(), "recreate");
   for( int plane_id = 0; plane_id < 20; ++plane_id ){
     std::string str_plane = "plane_"+std::to_string( plane_id );
@@ -82,5 +84,8 @@ void converter(std::string str_file_in, std::string str_file_out="out.root"){
     }
     file_out->cd();
   }
+
+  h2_tof_vs_tot_integral->Write();
+
   file_out->Close();
 }
