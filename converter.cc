@@ -4,7 +4,7 @@
 
 void converter(std::string str_file_in, std::string str_file_out="out.root"){
   ROOT::RDataFrame d( "TOF400", str_file_in );
-  auto dd = d.Filter("2.79812e+04 -3* 2.22095e+03 < BC1Int && BC1Int < 2.79812e+04 + 3*2.22095e+03")
+  auto dd = d.Filter("1e4 < BC1Int && BC1Int < 4e4")
           .Define("plane", "TOF400Conteiner.fPlane")
           .Define("strip", "TOF400Conteiner.fStrip")
           .Define("x", "TOF400Conteiner.fX")
@@ -44,11 +44,11 @@ void converter(std::string str_file_in, std::string str_file_out="out.root"){
             passed_cuts.push_back(0);
             continue;
           }
-          if( width.at(i) < 24 ){
+          if( width.at(i) < 24.5 ){
             passed_cuts.push_back(0);
             continue;
           }
-          if( width.at(i) > 25 ){
+          if( width.at(i) > 25.5 ){
             passed_cuts.push_back(0);
             continue;
           }
@@ -66,7 +66,7 @@ void converter(std::string str_file_in, std::string str_file_out="out.root"){
     h1_tot.emplace_back();
     for( int strip_id = 0; strip_id < 48; ++strip_id ){
       std::string str_coordinate = "plane"+std::to_string(plane_id)+"_strip"+std::to_string( strip_id );
-      h2_tof_vs_tot.back().push_back( dd.Histo2D({str_coordinate.c_str(), ";T0 width;dt", 60, 43, 49, 60, -540, -510}, "w0", "dt", str_coordinate) );
+      h2_tof_vs_tot.back().push_back( dd.Histo2D({str_coordinate.c_str(), ";T0 width;dt", 1024, 10, 50, 1024, -600, -4500}, "w0", "dt", str_coordinate) );
       h1_tot.back().push_back( dd.Histo1D({std::data("width_"+str_coordinate), ";width;counts", 100, 0, 100}, "width", str_coordinate) );
     }
   }
