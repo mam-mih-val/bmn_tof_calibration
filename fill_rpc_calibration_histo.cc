@@ -87,7 +87,7 @@ void fill_rpc_calibration_histo(std::string str_file_in, std::string str_file_ou
     h1_tot.emplace_back();
     for( int strip_id = 0; strip_id < 48; ++strip_id ){
       std::string str_coordinate = "plane"+std::to_string(plane_id)+"_strip"+std::to_string( strip_id );
-      h2_tof_vs_tot.back().push_back( dd.Histo2D({str_coordinate.c_str(), ";RPC width;dt", 100, -100, 100, 100, -1000, 0}, "width", "dt", str_coordinate) );
+      h2_tof_vs_tot.back().push_back( dd.Histo2D({str_coordinate.c_str(), ";RPC width;dt", 100, 0, 100, 100, 0, 100}, "width", "dt", str_coordinate) );
       h1_tot.back().push_back( dd.Histo1D({std::data("width_"+str_coordinate), ";width;counts", 100, 0, 100}, "width", str_coordinate) );
     }
   }
