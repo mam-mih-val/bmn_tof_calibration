@@ -94,7 +94,7 @@ void fill_rpc_calibration_histo(std::string str_file_in, std::string str_file_ou
     }
   }
 
-  auto h2_tof_vs_tot_integral = dd.Histo2D({"tof_vs_tot_integral", ";RPC width;dt", 1024, 0, 100, 1024, -50, -50}, "width", "dt");
+  auto h2_tof_vs_tot_integral = dd.Histo2D({"tof_vs_tot_integral", ";RPC width;dt", 1024, 0, 100, 1024, -5, 25}, "width", "dt");
 
   auto file_out = std::make_unique<TFile>(str_file_out.c_str(), "recreate");
   for( int plane_id = 0; plane_id < 20; ++plane_id ){
