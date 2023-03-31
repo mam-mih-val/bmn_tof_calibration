@@ -45,7 +45,7 @@ void fill_rpc_calibration_histo(std::string str_file_in, std::string str_file_ou
                     for( int i=0; i<vec_t0.size(); ++i ){
                       auto l_id = vec_id.at(i);
                       auto t0 = vec_t0.at(i);
-                      auto f1_calib = calib_functions.at(i);
+                      auto f1_calib = calib_functions.at(l_id);
                       if(!f1_calib) {
                         corrected_t0.push_back(t0);
                         continue;
