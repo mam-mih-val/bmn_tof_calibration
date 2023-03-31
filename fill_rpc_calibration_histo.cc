@@ -24,7 +24,6 @@ void fill_rpc_calibration_histo(std::string str_file_in, std::string str_file_ou
           .Define("time", "TOF400Conteiner.fTime")
           .Define("width", "TOF400Conteiner.fWidth")
           .Define("w0", "TOF400Conteiner.fWidthT0")
-          .Define("dt", "ROOT::VecOps::RVec<float> dt; for(int i=0; i<time.size(); ++i) dt.push_back(time[i]-t0[i]); return dt;")
           .Define("linear_id",
                   []( ROOT::VecOps::RVec<short> plane, ROOT::VecOps::RVec<short> strip ){
                     // vectorizing the matrix of [n_planes x n_strips]
@@ -57,6 +56,7 @@ void fill_rpc_calibration_histo(std::string str_file_in, std::string str_file_ou
                     }
                     return corrected_t0;
             },{"TOF400Conteiner.fTimeT0", "w0", "linear_id"})
+          .Define("dt", "ROOT::VecOps::RVec<float> dt; for(int i=0; i<time.size(); ++i) dt.push_back(time[i]-t0[i]); return dt;")
 
   ;
   std::vector< std::vector< ROOT::RDF::RResultPtr<::TH1D> > > h1_tot;
