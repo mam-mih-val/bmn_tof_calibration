@@ -25,6 +25,7 @@ void fill_rpc_calibration_histo(std::string str_file_in, std::string str_file_ou
           .Define("time", "TOF400Conteiner.fTime")
           .Define("width", "TOF400Conteiner.fWidth")
           .Define("w0", "TOF400Conteiner.fWidthT0")
+          .Define("t0", "TOF400Conteiner.fTimeT0")
           .Define("linear_id",
                   []( ROOT::VecOps::RVec<short> plane, ROOT::VecOps::RVec<short> strip ){
                     // vectorizing the matrix of [n_planes x n_strips]
@@ -38,26 +39,27 @@ void fill_rpc_calibration_histo(std::string str_file_in, std::string str_file_ou
                     return linear;
                   },
                   {"plane", "strip"})
-          .Define("t0",
-                  [calib_functions](ROOT::VecOps::RVec<float> vec_t0, ROOT::VecOps::RVec<float> vec_w0, ROOT::VecOps::RVec<int> vec_id){
-                    ROOT::VecOps::RVec<float> corrected_t0{};
+          .Define("dt",
+                  [calib_functions](ROOT::VecOps::RVec<float> vec_rpc_time, ROOT::VecOps::RVec<float> vec_t0, ROOT::VecOps::RVec<float> vec_w0, ROOT::VecOps::RVec<int> vec_id){
+                    ROOT::VecOps::RVec<float> corrected_dt{};
                     float correction{};
                     for( int i=0; i<vec_t0.size(); ++i ){
                       auto l_id = vec_id.at(i);
+                      auto t = vec_rpc_time.at(i);
                       auto t0 = vec_t0.at(i);
                       auto f1_calib = calib_functions.at(l_id);
                       if(!f1_calib) {
-                        corrected_t0.push_back(t0);
+                        corrected_dt.push_back(t-t0);
                         continue;
                       }
                       auto w0 = vec_w0.at(i);
                       auto corr = f1_calib->Eval(w0);
-                      auto corrected = t0 - corr;
-                      corrected_t0.push_back(corrected);
+                      auto corrected = t - t0 - corr;
+                      corrected_dt.push_back(corrected);
                     }
-                    return corrected_t0;
-            },{"TOF400Conteiner.fTimeT0", "w0", "linear_id"})
-          .Define("dt", "ROOT::VecOps::RVec<float> dt; for(int i=0; i<time.size(); ++i) dt.push_back(time[i]-t0[i]); return dt;")
+                    return corrected_dt;
+                  },
+                  {"time", "TOF400Conteiner.fTimeT0", "w0", "linear_id"})
 
   ;
   std::vector< std::vector< ROOT::RDF::RResultPtr<::TH1D> > > h1_tot;
