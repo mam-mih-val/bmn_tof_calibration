@@ -11,6 +11,7 @@ void fill_rpc_calibration_histo(std::string str_file_in, std::string str_file_ou
       TF1* f1{nullptr};
       calib_file->GetObject( name.c_str(), f1 );
       calib_functions.push_back(f1);
+      std::cout << "plane: " << plane_id << " strip: " << strip_id << " f1: " << f1 << "\n";
     }
   }
   ROOT::RDataFrame d( "TOF400", str_file_in );
