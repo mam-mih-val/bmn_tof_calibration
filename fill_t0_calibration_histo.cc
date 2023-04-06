@@ -2,8 +2,11 @@
 // Created by Misha on 3/28/2023.
 //
 
-void fill_t0_calibration_histo(std::string str_file_in, std::string str_file_out="out.root"){
-  ROOT::RDataFrame d( "TOF400", str_file_in );
+void fill_t0_calibration_histo(std::string str_list_in, std::string str_file_out="out.root"){
+  TFileCollection collection( "collection", "", str_list_in.c_str() );
+  auto* chain = new TChain( "TOF400" );
+  chain->AddFileInfoList( collection.GetList() );
+  ROOT::RDataFrame d( *chain );
   auto dd = d.Filter("1e4 < BC1Int && BC1Int < 4e4")
           .Define("plane", "TOF400Conteiner.fPlane")
           .Define("strip", "TOF400Conteiner.fStrip")
