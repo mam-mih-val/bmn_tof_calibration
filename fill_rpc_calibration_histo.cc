@@ -2,8 +2,8 @@
 // Created by Misha on 3/28/2023.
 //
 
-void fill_rpc_calibration_histo(std::string str_file_in, std::string str_file_out="out.root"){
-  auto calib_file = std::make_unique<TFile>( "calib/out.root" );
+void fill_rpc_calibration_histo(std::string str_list_in, std::string str_file_out="out.root"){
+  auto calib_file = std::make_unique<TFile>( "calib/t0_full.root" );
   std::vector<TF1*> calib_functions{};
   for( int plane_id = 0; plane_id < 20; ++plane_id ){
     for( int strip_id = 0; strip_id < 48; ++strip_id ){
@@ -14,7 +14,10 @@ void fill_rpc_calibration_histo(std::string str_file_in, std::string str_file_ou
       std::cout << "plane: " << plane_id << " strip: " << strip_id << " f1: " << f1 << "\n";
     }
   }
-  ROOT::RDataFrame d( "TOF400", str_file_in );
+  TFileCollection collection( "collection", "", str_list_in.c_str() );
+  auto* chain = new TChain( "TOF400" );
+  chain->AddFileInfoList( collection.GetList() );
+  ROOT::RDataFrame d( *chain );
   std::vector< std::vector< ROOT::RDF::RResultPtr<::TH2D> > > h2_tof_vs_tot;
   auto dd = d.Filter("1e4 < BC1Int && BC1Int < 4e4")
           .Define("plane", "TOF400Conteiner.fPlane")
