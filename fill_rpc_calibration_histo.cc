@@ -21,7 +21,7 @@ void fill_rpc_calibration_histo(std::string str_list_in, std::string str_file_ou
   std::vector< std::vector< ROOT::RDF::RResultPtr<::TH2D> > > h2_tof_vs_tot;
   auto dd = d
           .Filter("1e4 < BC1Int && BC1Int < 4e4")
-          .Filter("0 < et7 && et7 < 60")
+//          .Filter("0 < et7 && et7 < 60")
           .Define("plane", "TOF400Conteiner.fPlane")
           .Define("strip", "TOF400Conteiner.fStrip")
           .Define("x", "TOF400Conteiner.fX")
