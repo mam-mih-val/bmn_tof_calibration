@@ -94,12 +94,12 @@ void fill_rpc_calibration_histo(std::string str_list_in, std::string str_file_ou
     h1_tot.emplace_back();
     for( int strip_id = 0; strip_id < 48; ++strip_id ){
       std::string str_coordinate = "plane"+std::to_string(plane_id)+"_strip"+std::to_string( strip_id );
-      h2_tof_vs_tot.back().push_back( dd.Histo2D({str_coordinate.c_str(), ";RPC width;dt", 140, 10, 80, 140, -2, 5}, "width", "dt", str_coordinate) );
+      h2_tof_vs_tot.back().push_back( dd.Histo2D({str_coordinate.c_str(), ";RPC width;dt", 3072, 12, 84, 512, -2, 10}, "width", "dt", str_coordinate) );
       h1_tot.back().push_back( dd.Histo1D({std::data("width_"+str_coordinate), ";width;counts", 100, 0, 100}, "width", str_coordinate) );
     }
   }
 
-  auto h2_tof_vs_tot_integral = dd.Histo2D({"tof_vs_tot_integral", ";RPC width;dt", 1024, 0, 100, 1024, -5, 25}, "width", "dt");
+  auto h2_tof_vs_tot_integral = dd.Histo2D({"tof_vs_tot_integral", ";RPC width;dt", 3072, 12, 84, 512, -2, 10}, "width", "dt");
 
   auto file_out = std::make_unique<TFile>(str_file_out.c_str(), "recreate");
   for( int plane_id = 0; plane_id < 20; ++plane_id ){
