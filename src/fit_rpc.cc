@@ -27,9 +27,11 @@ int main(int n_args, char** args){
 
   auto file_out = std::make_unique<TFile>( str_file_out, "recreate" );
   file_out->cd();
+
   auto pdf_name = std::string(str_file_out)+".pdf";
   auto canv = std::make_unique<TCanvas>();
   canv->Print( std::data( pdf_name+"[" ) );
+
   for( auto plane : planes ) {
     std::string str_plane = "plane_" + std::to_string(plane);
     file_out->mkdir(std::data(str_plane));
@@ -44,34 +46,38 @@ int main(int n_args, char** args){
         h1_proj->Rebin(rebin_factor);
         auto tof_min = h1_proj->GetXaxis()->GetXmin();
         auto tof_max = h1_proj->GetXaxis()->GetXmax();
-        auto tof_range = fabs(tof_max - tof_min);
         std::string histo_name{ h1_proj->GetName() };
         auto f1_projection_fit = new TF1( histo_name.c_str(), "gaus", tof_min, tof_max );
         auto maximum = h1_proj->GetMaximum();
-        auto std_dev = h1_proj->GetStdDev();
-        auto maximum_bin = h1_proj->GetMaximumBin();
-        auto maximum_tof = h1_proj->GetBinCenter(maximum_bin);
         auto first_filled_bin = h1_proj->FindFirstBinAbove( 1 );
         auto first_x = h1_proj->GetBinCenter(first_filled_bin);
         auto last_bin_of_interest = h1_proj->FindFirstBinAbove( maximum * 0.75 );
         auto last_x =  h1_proj->GetBinCenter(last_bin_of_interest);
         f1_projection_fit->SetParameter( 0, maximum );
         f1_projection_fit->SetParLimits( 0, 0, maximum );
-//    f1_projection_fit->SetParameter( 0, maximum );
-//    f1_projection_fit->SetParameter( 1, maximum_tof );
-//    f1_projection_fit->SetParLimits( 1, tof_min, maximum_tof );
-//    f1_projection_fit->SetParameter( 2, 0.1 );
         f1_projection_fit->SetParLimits( 2, 0.0, 0.15 );
-//    f1_projection_fit->SetParameter( 3, 1.0 );
-//    f1_projection_fit->SetParLimits( 3, 0.0, 5.0 );
-        auto length = fabs(tof_max-tof_min);
         h1_proj->Fit( f1_projection_fit, "", "", first_x, last_x );
-//    h1_proj->Fit( "pol4", "", "", maximum_tof - std_dev, maximum_tof + 4*std_dev );
         auto y = f1_projection_fit->GetParameter(1);
         return std::tuple{y, f1_projection_fit};
+      }, [](TGraph* graph){
+        auto n_points = graph->GetN();
+        for( int i=2; i<n_points-2; ++i ){
+          auto y_im2 = graph->GetPointY(i-2);
+          auto y_im1 = graph->GetPointY(i-1);
+          auto y_i = graph->GetPointY(i);
+          auto y_ip1 = graph->GetPointY(i+1);
+          auto y_ip2 = graph->GetPointY(i+2);
+          auto y_new = (y_im2 + y_im1 + y_i + y_ip1+ y_ip2)/5.0;
+          graph->SetPointY(i, y_new);
+        }
+        auto y_first = graph->GetPointY(1);
+        auto y_last = graph->GetPointY(n_points-2);
+        graph->SetPoint(0, 0, y_first);
+        graph->SetPoint(n_points-1, 100, y_last);
       } );
       fitter.SetNPoints(n_bins);
       fitter.SetTofRebinFactor(rebin_factor);
+      fitter.SetTofTotFormula("pol4");
       fitter.Fit();
       fitter.Dump();
       fitter.PlotResults( pdf_name, str_plane + "/strip_" + std::to_string(strip) );

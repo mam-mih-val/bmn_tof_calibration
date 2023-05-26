@@ -14,21 +14,24 @@
 
 class FileParser {
 public:
-  explicit FileParser(std::string file_name) : file_name_(std::move(file_name)) {
+  explicit FileParser(std::string file_name) : file_name_(std::move(file_name)), current_histogram_{} {
     file_in_ = std::make_unique<TFile>(file_name_.c_str());
   }
   virtual ~FileParser() = default;
 
-  void ReadPlanes(std::vector<int> planes );
-
-  [[nodiscard]] const std::vector<TH2D *> &GetReadHistograms(int plane) const {
-    return read_histograms_.at(plane);
+  [[nodiscard]] TH2D* ReadHistogram(int plane, int strip) {
+    std::string path="plane_"+std::to_string(plane)+"/plane"+std::to_string(plane)+"_strip"+std::to_string(strip);
+    TH2D* h2{nullptr};
+    file_in_->GetObject( path.c_str(), h2 );
+    assert(h2);
+    current_histogram_.reset(h2);
+    return current_histogram_.get();
   }
 
 private:
   std::string file_name_;
   std::unique_ptr<TFile> file_in_;
-  std::map<int, std::vector<TH2D*>> read_histograms_;
+  std::unique_ptr<TH2D> current_histogram_;
 };
 
 
