@@ -69,7 +69,7 @@ int main(int n_args, char** args){
 //    h1_proj->Fit( "pol4", "", "", maximum_tof - std_dev, maximum_tof + 4*std_dev );
         auto y = f1_projection_fit->GetParameter(1);
         return std::tuple{y, f1_projection_fit};
-      } );
+      }, [](TGraph* g1){ g1->Fit( "pol1" ); } );
       fitter.SetNPoints(n_bins);
       fitter.SetTofRebinFactor(rebin_factor);
       fitter.Fit();
